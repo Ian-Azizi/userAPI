@@ -1,0 +1,58 @@
+package com.example.demo.Controller.api.user;
+
+import javax.servlet.http.HttpServletRequest;
+
+import com.example.demo.Service.user.UserService;
+import com.example.demo.entites.user.User;
+import com.example.demo.helper.exception.DataNotFoundException;
+import com.example.demo.helper.ui.ResponseStatus;
+import com.example.demo.helper.ui.ServiceResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+public class UserController {
+    private UserService service;
+    @RequestMapping(value = "/employees", method = RequestMethod.GET)
+    public ServiceResponse<User>get(String UserName,String password){
+        return new ServiceResponse<User>(ResponseStatus.SUCCESS,new User());
+
+    }
+
+    @PostMapping(value = "/members")
+    public ServiceResponse<User>add(@RequestBody User Date){
+        try{
+            User result = service.add(Date);
+            return new ServiceResponse<User>(ResponseStatus.SUCCESS,result);
+
+        }catch (Exception e){
+            return new ServiceResponse<User>(e);
+        }
+    }
+    @PutMapping("/User/Put")
+    public ServiceResponse<User>upDate(@RequestBody User data){
+        try{
+            User result = service.update(data);
+            return new ServiceResponse<User>(ResponseStatus.SUCCESS,result);
+        }catch (Exception e){
+            return new ServiceResponse<User>(e);
+
+        }
+    }
+    @DeleteMapping("/{id}")
+    public ServiceResponse<Boolean> delete(@PathVariable long id) {
+        try {
+            boolean result = service.deleteById(id);
+            return new ServiceResponse<Boolean>(ResponseStatus.SUCCESS, result);
+        } catch (Exception e) {
+            return new ServiceResponse<Boolean>(e);
+        }
+    }
+    @GetMapping("/test/user")
+    public User test(){
+        return new User();
+    }
+}

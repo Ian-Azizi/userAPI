@@ -7,6 +7,7 @@ import com.example.demo.entites.user.User;
 import com.example.demo.helper.exception.DataNotFoundException;
 import com.example.demo.helper.ui.ResponseStatus;
 import com.example.demo.helper.ui.ServiceResponse;
+import com.example.demo.helper.uimodels.user.UserVM;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -14,33 +15,38 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+//@RequestMapping("/api/User")
 public class UserController {
+    @Autowired
     private UserService service;
-    @RequestMapping(value = "/employees", method = RequestMethod.GET)
-    public ServiceResponse<User>get(String UserName,String password){
-        return new ServiceResponse<User>(ResponseStatus.SUCCESS,new User());
+
+   @RequestMapping(value = "/user/get",method = RequestMethod.GET)
+    public ServiceResponse<User>getById(long id){
+     return new ServiceResponse<User>(ResponseStatus.SUCCESS,new User());
 
     }
 
-    @PostMapping(value = "/members")
-    public ServiceResponse<User>add(@RequestBody User Date){
+    @RequestMapping("/user/post")
+    public ServiceResponse<User>addUser(@RequestBody User Date){
         try{
-            User result = service.add(Date);
-            return new ServiceResponse<User>(ResponseStatus.SUCCESS,result);
-
+            User adding = service.add(Date);
+            return new ServiceResponse<User>(ResponseStatus.SUCCESS,adding);
         }catch (Exception e){
             return new ServiceResponse<User>(e);
         }
+//        return new ServiceResponse<User>(ResponseStatus.SUCCESS, Date);
+
     }
-    @PutMapping("/User/Put")
-    public ServiceResponse<User>upDate(@RequestBody User data){
+    @RequestMapping("/user/put")
+    public ServiceResponse<User>upDateUser(@RequestBody User data){
         try{
-            User result = service.update(data);
-            return new ServiceResponse<User>(ResponseStatus.SUCCESS,result);
+            User updateData = service.upData(data);
+            return new ServiceResponse<User>(ResponseStatus.SUCCESS,updateData);
         }catch (Exception e){
             return new ServiceResponse<User>(e);
 
         }
+//        return new ServiceResponse<User>(ResponseStatus.SUCCESS,data);
     }
     @DeleteMapping("/{id}")
     public ServiceResponse<Boolean> delete(@PathVariable long id) {
@@ -51,8 +57,8 @@ public class UserController {
             return new ServiceResponse<Boolean>(e);
         }
     }
-    @GetMapping("/test/user")
-    public User test(){
-        return new User();
-    }
+//    @GetMapping("/test/user")
+//    public User test(){
+//        return new User();
+//    }
 }
